@@ -12,6 +12,7 @@ import { HeaderComponent } from './shared/header/header.component';
 import { ProgressComponent } from './pages/progress/progress.component';
 import { Graphic1Component } from './pages/graphic1/graphic1.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AdminComponent } from './pages/admin.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { AppRoutingModule } from './app-routing.module';
     HeaderComponent,
     ProgressComponent,
     Graphic1Component,
+    AdminComponent,
   ],
   imports: [
     BrowserModule,
