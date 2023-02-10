@@ -9,8 +9,26 @@ import { ProgressComponent } from './pages/progress/progress.component';
 
 const routes: Routes = [
   {
-    path: 'dashboard',
-    component: DashboardComponent,
+    path: '',
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: '/dashboard',
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+      },
+      {
+        path: 'progress',
+        component: ProgressComponent,
+      },
+      {
+        path: 'graphic1',
+        component: Graphic1Component,
+      },
+    ],
   },
   {
     path: 'login',
@@ -21,29 +39,14 @@ const routes: Routes = [
     component: RegisterComponent,
   },
   {
-    path: 'progress',
-    component: ProgressComponent,
+    path: '**',
+    component: PageNotFoundComponent,
   },
-  {
-    path: 'graphic1',
-    component: Graphic1Component,
-  },
-  {
-    path:'',
-    redirectTo: '/dashboard',
-    pathMatch: 'full'
-  },
-  {
-    path:'**',
-    component: PageNotFoundComponent
-  }
 ];
 
 @NgModule({
   declarations: [],
-  imports:[
-    RouterModule.forRoot(routes)
-  ],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
