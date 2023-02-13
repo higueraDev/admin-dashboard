@@ -6,6 +6,8 @@ import { Graphic1Component } from './graphic1/graphic1.component';
 import { ProgressComponent } from './progress/progress.component';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { ComponentsModule } from '../components/components.module';
 
 @NgModule({
   declarations: [
@@ -14,6 +16,12 @@ import { RouterModule } from '@angular/router';
     Graphic1Component,
     AdminComponent,
   ],
-  imports: [CommonModule, SharedModule, RouterModule],
+  imports: [
+    CommonModule,
+    SharedModule,
+    RouterModule,
+    FormsModule,
+    ComponentsModule,
+  ],
 })
 export class AdminModule {}
