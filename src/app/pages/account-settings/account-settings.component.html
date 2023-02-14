@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="col-3">
+    <div class="card">
+      <div class="card-body">
+        <h3>Select a theme</h3>
+        <div class="r-panel-body">
+          <ul id="themecolors" class="m-t-20">
+            <li><b>Light sidebar</b></li>
+            <li *ngFor="let theme of lightThemes; index as i">
+              <a
+                (click)="handleTheme(theme)"
+                [attr.data-theme]="theme"
+                class="selector {{ theme }}-theme"
+                [class.working]="theme === themeSelected"
+                >{{ i + 1 }}</a
+              >
+            </li>
+
+            <li class="d-block m-t-30"><b>Dark sidebar</b></li>
+
+            <li *ngFor="let theme of darkThemes; index as i">
+              <a
+                (click)="handleTheme(theme)"
+                [attr.data-theme]="theme"
+                class="selector {{ theme }}-theme"
+                [class.working]="theme === themeSelected"
+                >{{ i + 1 }}</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
