@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivationEnd, Event, Router } from '@angular/router';
 import { filter, map, Subscription } from 'rxjs';
-import { Breadcrumb } from '../../models/breadcrumb';
+import { Breadcrumb } from '../../interfaces/breadcrumb';
 
 @Component({
   selector: 'app-breadcrumbs',

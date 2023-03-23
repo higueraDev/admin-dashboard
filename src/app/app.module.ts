@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AdminModule } from './pages/admin.module';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { AdminModule } from './pages/admin.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AdminModule
+    AdminModule,
+    AuthModule
   ],
   bootstrap: [AppComponent]
 })
