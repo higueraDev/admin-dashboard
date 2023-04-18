@@ -55,7 +55,3 @@ Login register and recover password Page
   position: absolute;
   height: 100%;
 }
-
-button.disabled-button {
-  pointer-events: none;
-}

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthRoutingModule } from './auth/auth-routing.module';
-import { AdminRoutingModule } from './pages/admin-routing.module';
-import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { AdminRoutingModule } from './admin/admin-routing.module';
+import { PageNotFoundComponent } from './default/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {

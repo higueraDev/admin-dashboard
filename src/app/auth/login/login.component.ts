@@ -1,16 +1,21 @@
-import { AfterViewInit, Component, ElementRef, NgZone, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { GoogleService } from '../../services/google.service';
 import Swal from 'sweetalert2';
-
-declare const google: any;
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['../login-register.component.css'],
 })
-export class LoginComponent implements AfterViewInit {
+export class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('googleButton') googleButton: ElementRef;
   public loginForm: FormGroup;
 
@@ -18,43 +23,28 @@ export class LoginComponent implements AfterViewInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private ngZone: NgZone
+    private googleService: GoogleService
   ) {
     this.createForm();
   }
 
+  ngOnInit(): void {
+    this.googleService.googleInit();
+  }
+
   ngAfterViewInit() {
-    this.googleInit();
+    this.googleService.renderButton(this.googleButton);
   }
 
-  googleInit() {
-    google.accounts.id.initialize({
-      client_id:
-        '758111435129-0f4qvpo96i0q22j62bf41fi8k3em1u58.apps.googleusercontent.com',
-      callback: (response: any) => this.loginGoogle(response),
-    });
-    google.accounts.id.renderButton(
-      this.googleButton.nativeElement,
-      { theme: 'outline', size: 'large' } // customization attributes
-    );
-  }
-
-  loginGoogle(response: any) {
-    this.userService.loginGoogle(response.credential).subscribe({
-      next: () => this.ngZone.run(() => this.router.navigateByUrl('/dashboard')),
-      error: (error) =>
-        Swal.fire('Error', error.error.errors.token.msg, 'error'),
-    });
+  get email() {
+    return localStorage.getItem('email') || '';
   }
 
   createForm() {
     this.loginForm = this.formBuilder.group({
-      email: [
-        localStorage.getItem('email' || ''),
-        [Validators.required, Validators.email],
-      ],
+      email: [this.email, [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
-      remember: [false],
+      remember: [!!this.email],
     });
   }
 

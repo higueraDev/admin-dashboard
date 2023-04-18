@@ -1,13 +1,7 @@
-export interface RegisterResponse {
-  ok:     boolean;
-  userDB: UserDB;
-  token:  string;
-}
+import { User } from '../models/user';
 
-export interface UserDB {
-  uid:    string;
-  name:   string;
-  email:  string;
-  role:   string;
-  google: boolean;
+export interface RegisterResponse {
+  ok: boolean;
+  user: User;
+  token: string;
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from '../services/settings.service';
+import { GoogleService } from '../services/google.service';
 
 declare function customFunctionsInit(): void;
 
