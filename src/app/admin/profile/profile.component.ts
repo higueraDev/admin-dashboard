@@ -4,20 +4,21 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
 import { Subscription } from 'rxjs';
 import { FileUploadService } from '../../services/file-upload.service';
-import { FileCollections } from '../../enums/file-collections';
+import { Collections } from '../../enums/collections';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css'],
+  styleUrls: [],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   private userSubscription: Subscription;
+  private user: User;
   profileForm: FormGroup;
-  user: User;
   imagePreview: string;
   imageToUpload: File;
+  imageUrl: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,12 +41,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
       next: (user) => {
         if (!user) return;
         this.user = user;
+        this.imageUrl = user.imageUrl;
       },
     });
   }
 
   updateProfile() {
-    this.userService.updateUser(this.profileForm.value).subscribe({
+    const user: User = {
+      uid: this.user.uid,
+      ...this.profileForm.value,
+    };
+    this.userService.updateUser(user).subscribe({
       next: (resp) => {
         this.userService.setUser(resp.user);
         Swal.fire('Success', 'Profile Updated', 'success');
@@ -74,7 +80,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   updateImage() {
     this.fileUploadService
-      .upload(this.imageToUpload, FileCollections.USERS, this.user.uid)
+      .upload(this.imageToUpload, Collections.USERS, this.user.uid)
       .subscribe({
         next: (resp) => {
           this.user.image = resp.fileName;

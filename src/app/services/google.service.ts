@@ -22,9 +22,8 @@ export class GoogleService {
   }
 
   googleInit() {
-    google.accounts.id.initialize({
-      client_id:
-        '758111435129-0f4qvpo96i0q22j62bf41fi8k3em1u58.apps.googleusercontent.com',
+    google?.accounts.id.initialize({
+      client_id: environment.google_client_id,
       callback: (response: any) => this.handleLogin(response.credential),
     });
   }
@@ -40,7 +39,7 @@ export class GoogleService {
 
 
   revokeGoogleToken(email: string) {
-    google.accounts.id.revoke(email);
+    google?.accounts.id.revoke(email);
   }
 
   private login(token: string) {

@@ -1,0 +1,54 @@
+<div class="modal-bg">
+  <div class="modal animated fadeInDown fast" [class.show]="modalService.showModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Update User Image</h4>
+          <button
+            (click)="modalService.toggleModal()"
+            type="button"
+            class="close cursor"
+            aria-hidden="true"
+          >
+            ×
+          </button>
+        </div>
+        <div class="modal-body">
+          <h3>Select an Image</h3>
+          <img
+            *ngIf="imagePreview"
+            class="avatar--profile my-2"
+            [src]="imagePreview"
+            alt="User Image"
+          />
+          <img
+            *ngIf="!imagePreview"
+            class="avatar--profile my-2"
+            [src]="imageUrl"
+            alt="User Image"
+          />
+          <input (change)="loadImage($event)" class="mb-4" type="file" />
+        </div>
+        <div class="modal-footer">
+          <button
+            (click)="modalService.toggleModal()"
+            type="button"
+            class="btn btn-default waves-effect"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger waves-effect waves-light"
+            (click)="updateImage()"
+            [disabled]="!imageToUpload"
+            [class.disabled-button]="!imageToUpload"
+            type="button"
+          >
+            <i class="fa fa-save"></i> Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

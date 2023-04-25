@@ -12,6 +12,8 @@ import { GoogleService } from './google.service';
 import { UpdateUserResponse } from '../interfaces/update-user-response';
 import { ValidateTokenResponse } from '../interfaces/validate-token-response';
 import { UpdateUserForm } from '../interfaces/update-user-form';
+import { GetUsersResponse } from '../interfaces/get-users-response';
+import { Factories } from '../utils/factories';
 
 const base_url = environment.base_url;
 
@@ -19,7 +21,7 @@ const base_url = environment.base_url;
   providedIn: 'root',
 })
 export class UserService {
-  private user$: BehaviorSubject<User | null> =
+  private _user$: BehaviorSubject<User | null> =
     new BehaviorSubject<User | null>(null);
 
   constructor(
@@ -29,20 +31,19 @@ export class UserService {
   ) {}
 
   private get _user() {
-    return this.user$.value;
-  }
-
-  user() {
-    return this.user$.asObservable();
-  }
-
-  setUser(user: User) {
-    const { name, email, uid, role, google, image } = user;
-    this.user$.next(new User(uid, name, email, google, role, image));
+    return this._user$.value;
   }
 
   get token() {
     return localStorage.getItem('token') || '';
+  }
+
+  get headers() {
+    return {
+      headers: {
+        'auth-token': this.token,
+      },
+    };
   }
 
   get uid() {
@@ -53,13 +54,9 @@ export class UserService {
     return this._user?.email || '';
   }
 
-  logout() {
-    if (this._user?.google) {
-      this.googleSevice.googleInit();
-      this.revokeGoogleToken();
-    }
-    this.removeStorage();
-    this.navigateToLogin();
+  private isGoogle(email: string) {
+    if (email !== this.email) return false;
+    return this._user?.google || false;
   }
 
   private revokeGoogleToken() {
@@ -75,25 +72,34 @@ export class UserService {
     localStorage.removeItem('user');
   }
 
-  private isGoogle(email: string) {
-    if(email !== this.email) return false;
-    return this._user?.google || false;
+  user() {
+    return this._user$.asObservable();
+  }
+
+  setUser(user: User) {
+    this._user$.next(Factories.buildUser(user));
+  }
+
+  logout() {
+    if (this._user?.google) {
+      this.googleSevice.googleInit();
+      this.revokeGoogleToken();
+    }
+    this.removeStorage();
+    this.navigateToLogin();
   }
 
   validateToken(): Observable<boolean> {
     if (!this.token) return of(false);
-    return this.http
-      .get<ValidateTokenResponse>(`${base_url}/login/update-token`, {
-        headers: { 'auth-token': this.token },
-      })
-      .pipe(
-        map((resp) => {
-          this.setUser(resp.user);
-          localStorage.setItem('token', resp.token);
-          return true;
-        }),
-        catchError((_) => of(false))
-      );
+    const url = `${base_url}/login/update-token`;
+    return this.http.get<ValidateTokenResponse>(url, this.headers).pipe(
+      map((resp) => {
+        this.setUser(resp.user);
+        localStorage.setItem('token', resp.token);
+        return true;
+      }),
+      catchError((_) => of(false))
+    );
   }
 
   createUser(formData: RegisterForm) {
@@ -112,18 +118,31 @@ export class UserService {
     );
   }
 
-  updateUser(form: UpdateUserForm) {
-    const data = {
-      ...form,
-      google: this.isGoogle(form.email),
-      role: this._user?.role || 'USER_ROLE',
-    };
+  updateUser(user: User) {
+    const { uid, ...data } = user;
+    if (data.google === undefined) data.google = this.isGoogle(data.email);
+
     return this.http.put<UpdateUserResponse>(
-      `${base_url}/users/${this.uid}`,
+      `${base_url}/users/${uid}`,
       data,
-      {
-        headers: { 'auth-token': this.token },
-      }
+      this.headers
     );
+  }
+
+  getUsers(from: number = 0) {
+    const url = `${base_url}/users?from=${from}`;
+    return this.http.get<GetUsersResponse>(url, this.headers).pipe(
+      map((resp) => {
+        const users = resp.users.map((user) => Factories.buildUser(user));
+        return {
+          total: resp.total,
+          users,
+        };
+      })
+    );
+  }
+
+  removeUser(uid: string) {
+    return this.http.delete(`${base_url}/users/${uid}`, this.headers);
   }
 }

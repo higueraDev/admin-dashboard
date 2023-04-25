@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from '../services/settings.service';
-import { GoogleService } from '../services/google.service';
+import { ModalService } from '../services/modal.service';
 
 declare function customFunctionsInit(): void;
 
@@ -10,7 +10,10 @@ declare function customFunctionsInit(): void;
   styles: [],
 })
 export class AdminComponent implements OnInit {
-  constructor(private settingService: SettingsService) {}
+  constructor(
+    private settingService: SettingsService,
+    public modalService: ModalService
+  ) {}
 
   ngOnInit(): void {
     customFunctionsInit();

@@ -34,8 +34,8 @@
             </div>
           </div>
           <button
-            [disabled]="profileForm.invalid"
-            [class.disabled-button]="profileForm.invalid"
+            [disabled]="profileForm.pristine || profileForm.invalid"
+            [class.disabled-button]="profileForm.pristine || profileForm.invalid"
             type="submit"
             class="btn btn-block btn-success waves-effect waves-light m-r-10"
           >
@@ -51,8 +51,8 @@
       <div class="card-body">
         <h4 class="card-title">Avatar</h4>
         <h6 class="card-subtitle">User image</h6>
-        <img *ngIf="imagePreview" class="avatar my-2" [src]="imagePreview" alt="User Image" />
-        <img *ngIf="!imagePreview" class="avatar my-2" [src]="user.imageUrl" alt="User Image" />
+        <img *ngIf="imagePreview" class="avatar--profile my-2" [src]="imagePreview" alt="User Image" />
+        <img *ngIf="!imagePreview" class="avatar--profile my-2" [src]="imageUrl" alt="User Image" />
         <input (change)="loadImage($event)" class="mb-4" type="file" />
         <button
           (click)="updateImage()"

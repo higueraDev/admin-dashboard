@@ -12,6 +12,8 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { ProfileComponent } from './profile/profile.component';
+import { UsersComponent } from './management/users/users.component';
+import { ModalComponent } from '../components/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { ProfileComponent } from './profile/profile.component';
     PromisesComponent,
     RxjsComponent,
     ProfileComponent,
+    UsersComponent,
   ],
   imports: [
     CommonModule,
